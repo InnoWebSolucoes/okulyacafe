@@ -26,15 +26,15 @@
 
   <header class="site-header">
     <a class="brand" href="/okulya" aria-label="Okulya Café, página inicial">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="ring-brand" d="M50,50 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs><text><textPath href="#ring-brand" textLength="268">okulya café • talatona • luanda •</textPath></text></svg>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="ring-brand" d="M50,50 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs><text><textPath href="#ring-brand" textLength="268">Okulya Café • Talatona • Luanda •</textPath></text></svg>
       <img src="/okulya/assets/img/logo.webp" alt="" width="56" height="56">
     </a>
     <nav class="nav" aria-label="Principal">
-      <a href="/okulya/menu.html">menu</a>
-      <a href="/okulya/sobre.html">sobre</a>
-      <a href="/okulya/experiencias.html">experiências</a>
-      <a href="#contacto">contacto</a>
-      <a class="btn btn--ambar" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Gostaria%20de%20reservar%20uma%20mesa%20no%20Okulya%20Caf%C3%A9." target="_blank" rel="noopener">reservar mesa</a>
+      <a href="/okulya/menu.html">Menu</a>
+      <a href="/okulya/sobre.html">Sobre</a>
+      <a href="/okulya/experiencias.html">Experiências</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn btn--ambar" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Gostaria%20de%20reservar%20uma%20mesa%20no%20Okulya%20Caf%C3%A9." target="_blank" rel="noopener">Reservar mesa</a>
     </nav>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu"><span></span><b class="visually-hidden">Abrir menu</b></button>
   </header>
@@ -42,21 +42,23 @@
   <div class="mobile-menu" id="mobile-menu">
     <div class="mobile-menu__blob" aria-hidden="true"></div>
     <ul>
-      <li><a class="mm-link" href="/okulya/menu.html">menu</a></li>
-      <li><a class="mm-link" href="/okulya/sobre.html">sobre</a></li>
-      <li><a class="mm-link" href="/okulya/experiencias.html">experiências</a></li>
-      <li><a class="mm-link" href="#contacto">contacto</a></li>
+      <li><a class="mm-link" href="/okulya/menu.html">Menu</a></li>
+      <li><a class="mm-link" href="/okulya/sobre.html">Sobre</a></li>
+      <li><a class="mm-link" href="/okulya/experiencias.html">Experiências</a></li>
+      <li><a class="mm-link" href="#contacto">Contacto</a></li>
     </ul>
     <div class="mobile-menu__foot">
       <p>Rua do Mat, Talatona, Luanda</p>
       <p><span class="status" data-status>Aberto todos os dias a partir das 7h</span></p>
-      <p><a class="btn" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Gostaria%20de%20reservar%20uma%20mesa%20no%20Okulya%20Caf%C3%A9." target="_blank" rel="noopener">reservar mesa</a></p>
+      <p><a class="btn" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Gostaria%20de%20reservar%20uma%20mesa%20no%20Okulya%20Caf%C3%A9." target="_blank" rel="noopener">Reservar mesa</a></p>
     </div>
   </div>
 
   <main id="conteudo">
 
     <!-- ============ HERO ============ -->
+    <!-- hero-pin gives the hero room to stay on screen (CSS sticky) while the "o" opens -->
+    <div class="hero-pin">
     <section class="hero" aria-labelledby="hero-title">
       <!-- The photo seen through the "o". With motion, scrolling opens it until it fills the screen. -->
       <div class="hero__reveal" aria-hidden="true">
@@ -73,8 +75,8 @@
           <img class="hero__plate" src="/okulya/assets/img/plate-4.webp" alt="Prato do chefe com colher dourada" width="800" height="761" loading="lazy">
         </div>
         <div class="sticker hero__sticker" aria-hidden="true">
-          <svg class="ring" viewBox="0 0 100 100"><defs><path id="ring-hero" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs><text><textPath href="#ring-hero" textLength="248">café • pastelaria • almoço • petiscos •</textPath></text></svg>
-          <span class="sticker__core">desde<br>2022</span>
+          <svg class="ring" viewBox="0 0 100 100"><defs><path id="ring-hero" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs><text><textPath href="#ring-hero" textLength="248">Café • Pastelaria • Almoço • Petiscos •</textPath></text></svg>
+          <span class="sticker__core">Desde<br>2022</span>
         </div>
         <div class="hero__dots" role="group" aria-label="Pratos em destaque">
           <button type="button" aria-current="true" aria-label="Prato 1"></button>
@@ -90,130 +92,134 @@
           <img class="hero__swoosh" src="/okulya/assets/img/swoosh.webp" alt="" width="900" height="705" aria-hidden="true">
           <span class="hero__o" aria-hidden="true"><img class="hero__o-img" src="/okulya/assets/img/parede-okulya-o.webp" alt="" width="480" height="480"></span><span class="hero__letters" aria-hidden="true"><span class="hero__l"><span>k</span></span><span class="hero__l"><span>u</span></span><span class="hero__l"><span>l</span></span><span class="hero__l"><span>y</span></span><span class="hero__l"><span>a</span></span></span>
         </h1>
-        <p class="hero__def" data-hero-item><b>okulya</b> <i>do umbundu,</i> <span>comer.</span></p>
+        <p class="hero__def" data-hero-item><b>Okulya</b> <i>do umbundu,</i> <span>comer.</span></p>
         <p class="hero__tag" data-hero-item>O sabor de casa. A alma de Luanda.</p>
         <div class="hero__actions" data-hero-item>
-          <a class="btn" href="/okulya/menu.html">ver o menu</a>
-          <a class="btn btn--line" href="#contacto">como chegar</a>
+          <a class="btn" href="/okulya/menu.html">Ver o menu</a>
+          <a class="btn btn--line" href="#contacto">Como chegar</a>
         </div>
         <p data-hero-item><span class="status" data-status>Aberto todos os dias a partir das 7h</span></p>
       </div>
 
-      <a class="hero__cue" href="#o-dia"><span>o nosso dia</span><i></i></a>
+      <a class="hero__cue" href="#o-dia"><span>O nosso dia</span><i></i></a>
 
       <!-- Appears on the photo once it has filled the screen: the start of "um dia no okulya" -->
       <div class="hero__after" aria-hidden="true">
-        <p class="display-l"><span class="line-mask"><span>um dia</span></span><span class="line-mask"><span>no okulya</span></span></p>
+        <p class="display-l"><span class="line-mask"><span>Um dia</span></span><span class="line-mask"><span>no Okulya</span></span></p>
         <p class="lede">Abrimos às 7h e a cozinha acompanha o dia: café e pastelaria de manhã, almoço ao meio-dia, petiscos ao fim da tarde.</p>
       </div>
     </section>
+    </div>
 
     <!-- ============ THE DAY (porthole) ============ -->
     <section class="dia" id="o-dia" aria-labelledby="dia-title">
       <div class="dia__intro">
-        <h2 class="display-l" id="dia-title" data-rise><span class="line-mask"><span>um dia</span></span><span class="line-mask"><span>no okulya</span></span></h2>
+        <h2 class="display-l" id="dia-title" data-rise><span class="line-mask"><span>Um dia</span></span><span class="line-mask"><span>no Okulya</span></span></h2>
         <p class="lede">Abrimos às 7h e a cozinha acompanha o dia: café e pastelaria de manhã, almoço ao meio-dia, petiscos ao fim da tarde.</p>
       </div>
 
+      <!-- dia__track is the scroll length of the story; the stage stays on screen inside it (CSS sticky) -->
+      <div class="dia__track">
       <div class="dia__stage">
         <div class="dia__sun" aria-hidden="true"></div>
-        <div class="dia__index" aria-label="Momentos do dia">
-          <button type="button" data-step="0"><span>abertura<small>7h</small></span></button>
-          <button type="button" data-step="1"><span>café<small>a partir das 10h</small></span></button>
-          <button type="button" data-step="2"><span>pastelaria<small>a partir das 10h</small></span></button>
-          <button type="button" data-step="3"><span>almoço<small>a partir das 12h30</small></span></button>
-          <button type="button" data-step="4"><span>petiscos<small>a partir das 17h</small></span></button>
-          <button type="button" data-step="5"><span>vinho<small>todo o dia</small></span></button>
-          <button type="button" data-step="6"><span>cocktails<small>todo o dia</small></span></button>
-        </div>
+        <nav class="dia__index" aria-label="Momentos do dia">
+          <button type="button" data-step="0" aria-label="Abertura, 7h"><i></i><span>Abertura</span></button>
+          <button type="button" data-step="1" aria-label="Café, a partir das 10h"><i></i><span>Café</span></button>
+          <button type="button" data-step="2" aria-label="Pastelaria, a partir das 10h"><i></i><span>Pastelaria</span></button>
+          <button type="button" data-step="3" aria-label="Almoço, a partir das 12h30"><i></i><span>Almoço</span></button>
+          <button type="button" data-step="4" aria-label="Petiscos, a partir das 17h"><i></i><span>Petiscos</span></button>
+          <button type="button" data-step="5" aria-label="Vinho, todo o dia"><i></i><span>Vinho</span></button>
+          <button type="button" data-step="6" aria-label="Cocktails, todo o dia"><i></i><span>Cocktails</span></button>
+        </nav>
         <img class="dia__cutout dia__cutout--a" src="/okulya/assets/img/plate-2.webp" alt="" width="800" height="792" loading="lazy" aria-hidden="true">
         <img class="dia__cutout dia__cutout--b" src="/okulya/assets/img/plate-3.webp" alt="" width="800" height="735" loading="lazy" aria-hidden="true">
 
         <ol class="dia__steps">
           <li class="dia__step">
-            <div class="dia__circle"><div class="dia__img dia__img--open"><img src="/okulya/assets/img/swoosh.webp" alt="" width="900" height="705"><span>7h</span></div></div>
+            <div class="dia__circle"><div class="dia__img"><img src="/okulya/assets/img/day-open.webp" alt="Entrada do Okulya Café, com as portas de vidro e o letreiro" width="720" height="1280"></div></div>
             <div class="dia__caption">
-              <h3 class="duo"><span class="light">todos os dias</span><span class="dark">abrimos às 7h</span></h3>
+              <h3 class="duo"><span class="light">Todos os dias</span><span class="dark">Abrimos às 7h</span></h3>
               <p class="desc">De segunda a sexta até às 20h. Sábados, domingos e feriados até às 18h.</p>
             </div>
           </li>
           <li class="dia__step">
             <div class="dia__circle"><div class="dia__img"><img src="/okulya/assets/img/day-coffee.webp" alt="Barista a preparar café na máquina de espresso" width="1000" height="1500" loading="lazy"></div></div>
             <div class="dia__caption">
-              <h3 class="duo"><span class="light">a partir das 10h</span><span class="dark">café</span></h3>
+              <h3 class="duo"><span class="light">A partir das 10h</span><span class="dark">Café</span></h3>
               <p class="desc">Grãos escolhidos pelo seu carácter e torrados para realçar o melhor de cada um. Do espresso rápido ao cappuccino demorado, a manhã é ao teu ritmo.</p>
-              <a class="link" href="/okulya/menu.html#bebidas">ver bebidas</a>
+              <a class="link" href="/okulya/menu.html#bebidas">Ver bebidas</a>
             </div>
           </li>
           <li class="dia__step">
             <div class="dia__circle"><div class="dia__img"><img src="/okulya/assets/img/day-pastry.webp" alt="Torradas, compota e sumo de laranja" width="1000" height="1500" loading="lazy"></div></div>
             <div class="dia__caption">
-              <h3 class="duo"><span class="light">a partir das 10h</span><span class="dark">pastelaria</span></h3>
+              <h3 class="duo"><span class="light">A partir das 10h</span><span class="dark">Pastelaria</span></h3>
               <p class="desc">Feita fresca todas as manhãs, com técnicas clássicas e ingredientes da estação. Croissants, brioches e os especiais do dia.</p>
-              <a class="link" href="/okulya/menu.html#sobremesas">ver doces</a>
+              <a class="link" href="/okulya/menu.html#sobremesas">Ver doces</a>
             </div>
           </li>
           <li class="dia__step">
             <div class="dia__circle"><div class="dia__img"><img src="/okulya/assets/img/day-salad.webp" alt="Taça de salada com grão, legumes e queijo" width="1000" height="1250" loading="lazy"></div></div>
             <div class="dia__caption">
-              <h3 class="duo"><span class="light">a partir das 12h30</span><span class="dark">almoço</span></h3>
+              <h3 class="duo"><span class="light">A partir das 12h30</span><span class="dark">Almoço</span></h3>
               <p class="desc">Leve, da estação e sem complicações. Pratos simples e generosos, e o prato do dia por 5.000 Kz.</p>
-              <a class="link" href="/okulya/menu.html#pratos">ver pratos</a>
+              <a class="link" href="/okulya/menu.html#pratos">Ver pratos</a>
             </div>
           </li>
           <li class="dia__step">
             <div class="dia__circle"><div class="dia__img"><img src="/okulya/assets/img/day-snacks.webp" alt="Petisco servido num prato fundo" width="1000" height="1500" loading="lazy"></div></div>
             <div class="dia__caption">
-              <h3 class="duo"><span class="light">a partir das 17h</span><span class="dark">petiscos</span></h3>
+              <h3 class="duo"><span class="light">A partir das 17h</span><span class="dark">Petiscos</span></h3>
               <p class="desc">Para partilhar e comer com calma. Uns vêm das tradições daqui, outros de mais longe, e todos combinam com um copo.</p>
-              <a class="link" href="/okulya/menu.html#entradas">ver petiscos</a>
+              <a class="link" href="/okulya/menu.html#entradas">Ver petiscos</a>
             </div>
           </li>
           <li class="dia__step">
             <div class="dia__circle"><div class="dia__img"><img src="/okulya/assets/img/day-wine.webp" alt="Garrafa e copo de vinho branco numa mesa de mármore" width="1000" height="1500" loading="lazy"></div></div>
             <div class="dia__caption">
-              <h3 class="duo"><span class="light">servido todo o dia</span><span class="dark">vinho</span></h3>
+              <h3 class="duo"><span class="light">Servido todo o dia</span><span class="dark">Vinho</span></h3>
               <p class="desc">Uma carta feita de curiosidade e conversa: pequenos produtores, vinhos descontraídos mas pensados.</p>
-              <a class="link" href="/okulya/menu.html#bebidas">ver a carta</a>
+              <a class="link" href="/okulya/menu.html#bebidas">Ver a carta</a>
             </div>
           </li>
           <li class="dia__step">
             <div class="dia__circle"><div class="dia__img"><img src="/okulya/assets/img/day-cocktails.webp" alt="Cocktail rosado num copo de pé" width="1000" height="1500" loading="lazy"></div></div>
             <div class="dia__caption">
-              <h3 class="duo"><span class="light">servido todo o dia</span><span class="dark">cocktails</span></h3>
+              <h3 class="duo"><span class="light">Servido todo o dia</span><span class="dark">Cocktails</span></h3>
               <p class="desc">Feitos com o que está fresco e com produtores locais. Simples, expressivos e discretamente inventivos.</p>
-              <a class="link" href="/okulya/menu.html#bebidas">ver cocktails</a>
+              <a class="link" href="/okulya/menu.html#bebidas">Ver cocktails</a>
             </div>
           </li>
         </ol>
-        <p class="dia__hint" aria-hidden="true">continua a descer</p>
+        <p class="dia__hint" aria-hidden="true">Continua a descer</p>
+      </div>
       </div>
     </section>
 
     <!-- ============ MENU (loud band) ============ -->
     <section class="menu-band wavy" id="menu" aria-labelledby="menu-title">
       <div class="menu-band__head wrap">
-        <h2 class="display-l" id="menu-title" data-rise><span class="line-mask"><span>o menu</span></span></h2>
+        <h2 class="display-l" id="menu-title" data-rise><span class="line-mask"><span>O menu</span></span></h2>
         <p class="lede">Do caldo de amendoim ao frango na brasa, com sumos espremidos na hora.</p>
       </div>
 
       <div class="menu-band__clip" aria-hidden="true">
         <div class="marquee" data-marquee="1">
           <div class="marquee__track">
-            <span class="marquee__item marquee__item--outline">caldo de amendoim</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--fill">camarão ao alho</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--outline">polvo grelhado</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--fill">frango na brasa</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--outline">costela premium</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--outline">Caldo de Amendoim</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--fill">Camarão ao Alho</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--outline">Polvo Grelhado</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--fill">Frango na Brasa</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--outline">Costela Premium</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
           </div>
         </div>
         <div class="marquee" data-marquee="-1">
           <div class="marquee__track">
-            <span class="marquee__item marquee__item--fill">pudim de coco</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--outline">mousse de maracujá</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--fill">sumos naturais</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--outline">semifrio de amendoim</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
-            <span class="marquee__item marquee__item--fill">caipirinha da casa</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--fill">Pudim de Coco</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--outline">Mousse de Maracujá</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--fill">Sumos Naturais</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--outline">Semifrio de Amendoim</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
+            <span class="marquee__item marquee__item--fill">Caipirinha da Casa</span><span class="marquee__sep"><img src="/okulya/assets/img/swoosh.webp" alt=""></span>
           </div>
         </div>
       </div>
@@ -221,35 +227,35 @@
       <div class="wrap">
         <ul class="cats">
           <li>
-            <a class="cat" data-pop href="/okulya/menu.html#entradas" data-cursor="ver">
+            <a class="cat" data-pop href="/okulya/menu.html#entradas" data-cursor="Ver">
               <span class="cat__badge" style="--c: var(--cal)"><img src="/okulya/assets/img/plate-1.webp" alt="" width="800" height="777" loading="lazy"></span>
-              <h3>entradas</h3>
-              <p>petiscos e sopas</p>
+              <h3>Entradas</h3>
+              <p>Petiscos e sopas</p>
             </a>
           </li>
           <li>
-            <a class="cat" data-pop href="/okulya/menu.html#pratos" data-cursor="ver">
+            <a class="cat" data-pop href="/okulya/menu.html#pratos" data-cursor="Ver">
               <span class="cat__badge" style="--c: var(--ceu)"><img src="/okulya/assets/img/plate-2.webp" alt="" width="800" height="792" loading="lazy"></span>
-              <h3>pratos principais</h3>
-              <p>mar e terra</p>
+              <h3>Pratos principais</h3>
+              <p>Mar e terra</p>
             </a>
           </li>
           <li>
-            <a class="cat" data-pop href="/okulya/menu.html#sobremesas" data-cursor="ver">
+            <a class="cat" data-pop href="/okulya/menu.html#sobremesas" data-cursor="Ver">
               <span class="cat__badge" style="--c: var(--mel)"><img src="/okulya/assets/img/plate-4.webp" alt="" width="800" height="761" loading="lazy"></span>
-              <h3>sobremesas</h3>
-              <p>doces finais</p>
+              <h3>Sobremesas</h3>
+              <p>Doces finais</p>
             </a>
           </li>
           <li>
-            <a class="cat" data-pop href="/okulya/menu.html#bebidas" data-cursor="ver">
+            <a class="cat" data-pop href="/okulya/menu.html#bebidas" data-cursor="Ver">
               <span class="cat__badge cat__badge--photo" style="--c: var(--cafe)"><img src="/okulya/assets/img/day-cocktails.webp" alt="" width="1000" height="1500" loading="lazy"></span>
-              <h3>bebidas</h3>
-              <p>bar e carta de vinhos</p>
+              <h3>Bebidas</h3>
+              <p>Bar e carta de vinhos</p>
             </a>
           </li>
         </ul>
-        <div class="menu-band__cta"><a class="btn" href="/okulya/menu.html">ver o menu completo</a></div>
+        <div class="menu-band__cta"><a class="btn" href="/okulya/menu.html">Ver o menu completo</a></div>
       </div>
     </section>
 
@@ -257,7 +263,7 @@
     <section class="exp" aria-labelledby="exp-title">
       <div class="wrap">
         <div class="exp__head">
-          <h2 class="display-m" id="exp-title" data-rise><span class="line-mask"><span>cada visita</span></span><span class="line-mask"><span>é uma ocasião</span></span></h2>
+          <h2 class="display-m" id="exp-title" data-rise><span class="line-mask"><span>Cada visita</span></span><span class="line-mask"><span>é uma ocasião</span></span></h2>
           <p class="lede">Eventos todas as semanas, promoções para quem nos visita sempre e espaço para as celebrações que contam.</p>
         </div>
 
@@ -265,21 +271,21 @@
           <div class="prato__visual">
             <img src="/okulya/assets/img/plate-4.webp" alt="Prato do dia empratado" width="800" height="761" loading="lazy">
             <div class="sticker prato__price" data-pop>
-              <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="ring-prato" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs><text><textPath href="#ring-prato" textLength="248">prato do dia • todos os dias •</textPath></text></svg>
-              <span class="sticker__core">5.000<small>kwanzas</small></span>
+              <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="ring-prato" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs><text><textPath href="#ring-prato" textLength="248">Prato do dia • Todos os dias •</textPath></text></svg>
+              <span class="sticker__core">5.000<small>Kwanzas</small></span>
             </div>
           </div>
           <div class="prato__copy">
-            <h3 class="display-m">prato do dia</h3>
+            <h3 class="display-m">Prato do dia</h3>
             <p class="prose">O melhor da nossa cozinha num único prato, preparado todos os dias com os ingredientes mais frescos do mercado. Bem servido, bem apresentado e sem esperas.</p>
             <ul class="prato__facts">
-              <li>todos os dias</li>
-              <li>para levar ou no espaço</li>
-              <li>ingredientes do dia</li>
+              <li>Todos os dias</li>
+              <li>Para levar ou no espaço</li>
+              <li>Ingredientes do dia</li>
             </ul>
             <a class="btn" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Qual%20%C3%A9%20o%20prato%20do%20dia%20hoje%3F" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><use href="#i-wa"/></svg>
-              perguntar o prato de hoje
+              Perguntar o prato de hoje
             </a>
           </div>
         </article>
@@ -287,36 +293,36 @@
         <div class="cards">
           <article class="card">
             <div>
-              <h3>promoções e descontos</h3>
+              <h3>Promoções e descontos</h3>
               <ul>
-                <li>para quem nos segue nas redes</li>
-                <li>para clientes regulares</li>
-                <li>em datas especiais</li>
+                <li>Para quem nos segue nas redes</li>
+                <li>Para clientes regulares</li>
+                <li>Em datas especiais</li>
               </ul>
             </div>
-            <a class="link" href="/okulya/experiencias.html#promocoes">ver promoções</a>
+            <a class="link" href="/okulya/experiencias.html#promocoes">Ver promoções</a>
           </article>
           <article class="card">
             <div>
-              <h3>eventos corporativos</h3>
+              <h3>Eventos corporativos</h3>
               <ul>
-                <li>reuniões</li>
-                <li>lançamentos</li>
-                <li>jantares de negócios</li>
+                <li>Reuniões</li>
+                <li>Lançamentos</li>
+                <li>Jantares de negócios</li>
               </ul>
             </div>
-            <a class="link" href="/okulya/experiencias.html#corporativos">saber mais</a>
+            <a class="link" href="/okulya/experiencias.html#corporativos">Saber mais</a>
           </article>
           <article class="card">
             <div>
-              <h3>o teu aniversário</h3>
+              <h3>O teu aniversário</h3>
               <ul>
-                <li>celebrações à medida</li>
-                <li>grupos a partir de 10 pessoas</li>
-                <li>reserva privada</li>
+                <li>Celebrações à medida</li>
+                <li>Grupos a partir de 10 pessoas</li>
+                <li>Reserva privada</li>
               </ul>
             </div>
-            <a class="link" href="/okulya/experiencias.html#aniversarios">saber mais</a>
+            <a class="link" href="/okulya/experiencias.html#aniversarios">Saber mais</a>
           </article>
         </div>
       </div>
@@ -331,7 +337,7 @@
           <p class="fill-text" data-fill>Viemos para ficar. O Okulya é onde os escritórios da vizinhança fazem reuniões, onde as famílias celebram pequenos momentos e onde os amigos se reencontram ao fim de semana.</p>
           <div class="home-about__foot">
             <span class="muted">Talatona, desde 2022</span>
-            <a class="link" href="/okulya/sobre.html">a nossa história</a>
+            <a class="link" href="/okulya/sobre.html">A nossa história</a>
           </div>
         </div>
       </div>
@@ -345,17 +351,17 @@
       </div>
       <div class="insta__clip">
         <div class="fan">
-          <a class="fan__card" style="--i:-3;--a:3" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="ver"><img src="/okulya/assets/img/instagram/post-03.jpg" alt="Tosta mista com café com leite" width="240" height="427" loading="lazy"></a>
-          <a class="fan__card" style="--i:-2;--a:2" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="ver"><img src="/okulya/assets/img/instagram/post-02.jpg" alt="Três sumos naturais à frente do logótipo do Okulya" width="240" height="426" loading="lazy"></a>
-          <a class="fan__card" style="--i:-1;--a:1" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="ver"><img src="/okulya/assets/img/instagram/post-06.jpg" alt="Espresso a sair da máquina para a chávena" width="240" height="426" loading="lazy"></a>
+          <a class="fan__card" style="--i:-3;--a:3" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="Ver"><img src="/okulya/assets/img/instagram/post-03.jpg" alt="Tosta mista com café com leite" width="240" height="427" loading="lazy"></a>
+          <a class="fan__card" style="--i:-2;--a:2" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="Ver"><img src="/okulya/assets/img/instagram/post-02.jpg" alt="Três sumos naturais à frente do logótipo do Okulya" width="240" height="426" loading="lazy"></a>
+          <a class="fan__card" style="--i:-1;--a:1" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="Ver"><img src="/okulya/assets/img/instagram/post-06.jpg" alt="Espresso a sair da máquina para a chávena" width="240" height="426" loading="lazy"></a>
           <div class="fan__card fan__card--profile" style="--i:0;--a:0">
             <img src="/okulya/assets/img/logo.webp" alt="" width="92" height="92" loading="lazy">
             <b>@0kulya.cafe</b>
-            <a class="btn btn--ambar" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener">seguir</a>
+            <a class="btn btn--ambar" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener">Seguir</a>
           </div>
-          <a class="fan__card" style="--i:1;--a:1" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="ver"><img src="/okulya/assets/img/instagram/post-01.jpg" alt="Sumo de laranja e fatia de bolo de chocolate" width="240" height="427" loading="lazy"></a>
-          <a class="fan__card" style="--i:2;--a:2" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="ver"><img src="/okulya/assets/img/instagram/post-05.jpg" alt="Letreiro do Okulya Café com janelas azuis" width="240" height="427" loading="lazy"></a>
-          <a class="fan__card" style="--i:3;--a:3" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="ver"><img src="/okulya/assets/img/instagram/post-04.jpg" alt="Bolo de jinguba crocante a ser cortado" width="240" height="426" loading="lazy"></a>
+          <a class="fan__card" style="--i:1;--a:1" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="Ver"><img src="/okulya/assets/img/instagram/post-01.jpg" alt="Sumo de laranja e fatia de bolo de chocolate" width="240" height="427" loading="lazy"></a>
+          <a class="fan__card" style="--i:2;--a:2" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="Ver"><img src="/okulya/assets/img/instagram/post-05.jpg" alt="Letreiro do Okulya Café com janelas azuis" width="240" height="427" loading="lazy"></a>
+          <a class="fan__card" style="--i:3;--a:3" href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener" data-cursor="Ver"><img src="/okulya/assets/img/instagram/post-04.jpg" alt="Bolo de jinguba crocante a ser cortado" width="240" height="426" loading="lazy"></a>
         </div>
       </div>
     </section>
@@ -363,26 +369,26 @@
     <!-- ============ VISIT ============ -->
     <section class="visit" id="contacto" aria-labelledby="visit-title">
       <div class="wrap">
-        <h2 class="display-l" id="visit-title" data-rise style="margin-bottom: clamp(32px, 5vw, 64px)"><span class="line-mask"><span>encontra-nos</span></span></h2>
+        <h2 class="display-l" id="visit-title" data-rise style="margin-bottom: clamp(32px, 5vw, 64px)"><span class="line-mask"><span>Encontra-nos</span></span></h2>
         <div class="visit__card">
           <div class="visit__info">
             <dl>
               <div>
-                <dt>morada</dt>
+                <dt>Morada</dt>
                 <dd>Rua do Mat, Talatona, Luanda</dd>
               </div>
               <div>
-                <dt>horário</dt>
-                <dd class="hours"><span>segunda a sexta</span><span>7h – 20h</span><span>sábado, domingo e feriados</span><span>7h – 18h</span></dd>
+                <dt>Horário</dt>
+                <dd class="hours"><span>Segunda a sexta</span><span>7h – 20h</span><span>Sábado, domingo e feriados</span><span>7h – 18h</span></dd>
                 <dd><span class="status" data-status>Aberto todos os dias a partir das 7h</span></dd>
               </div>
               <div>
-                <dt>fala connosco</dt>
+                <dt>Fala connosco</dt>
                 <dd><a class="link" href="tel:+244933002904">+244 933 002 904</a></dd>
               </div>
             </dl>
             <div class="visit__actions">
-              <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=-8.9171841,13.1995378" target="_blank" rel="noopener">como chegar</a>
+              <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=-8.9171841,13.1995378" target="_blank" rel="noopener">Como chegar</a>
               <a class="btn btn--light" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Okulya%20Caf%C3%A9." target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><use href="#i-wa"/></svg>
                 WhatsApp
@@ -392,7 +398,7 @@
           <div class="visit__map">
             <iframe title="Mapa com a localização do Okulya Café em Talatona" src="https://maps.google.com/maps?q=-8.9171841,13.1995378&amp;z=16&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
-          <a class="visit__tab" href="https://www.google.com/maps/dir/?api=1&amp;destination=-8.9171841,13.1995378" target="_blank" rel="noopener">como chegar</a>
+          <a class="visit__tab" href="https://www.google.com/maps/dir/?api=1&amp;destination=-8.9171841,13.1995378" target="_blank" rel="noopener">Como chegar</a>
         </div>
       </div>
     </section>
@@ -404,22 +410,22 @@
       <div class="footer__grid">
         <h2>Passa hoje por cá.</h2>
         <div>
-          <h3>visita</h3>
+          <h3>Visita</h3>
           <ul>
             <li>Rua do Mat, Talatona, Luanda</li>
-            <li>seg. a sex. 7h – 20h</li>
-            <li>sáb., dom. e feriados 7h – 18h</li>
+            <li>Seg. a sex. 7h – 20h</li>
+            <li>Sáb., dom. e feriados 7h – 18h</li>
           </ul>
         </div>
         <div>
-          <h3>fala connosco</h3>
+          <h3>Fala connosco</h3>
           <ul>
             <li><a href="https://wa.me/244933002904" target="_blank" rel="noopener">WhatsApp</a></li>
             <li><a href="tel:+244933002904">+244 933 002 904</a></li>
           </ul>
         </div>
         <div>
-          <h3>segue</h3>
+          <h3>Segue</h3>
           <ul>
             <li><a href="https://www.instagram.com/0kulya.cafe/" target="_blank" rel="noopener">Instagram</a></li>
             <li><a href="https://www.facebook.com/profile.php?id=100083340589429" target="_blank" rel="noopener">Facebook</a></li>
@@ -431,14 +437,14 @@
       </div>
       <div class="footer__legal">
         <span>© <span data-year>2026</span> Okulya Café, Talatona, Luanda</span>
-        <span class="footer__links"><a href="/okulya/menu.html">menu</a><a href="/okulya/sobre.html">sobre</a><a href="/okulya/experiencias.html">experiências</a></span>
+        <span class="footer__links"><a href="/okulya/menu.html">Menu</a><a href="/okulya/sobre.html">Sobre</a><a href="/okulya/experiencias.html">Experiências</a></span>
       </div>
     </div>
-    <p class="footer__word" aria-hidden="true">okulya</p>
+    <p class="footer__word" aria-hidden="true">Okulya</p>
   </footer>
 
   <a class="sticker wa" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Okulya%20Caf%C3%A9." target="_blank" rel="noopener" aria-label="Fala connosco no WhatsApp">
-    <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="ring-wa" d="M50,50 m-39,0 a39,39 0 1,1 78,0 a39,39 0 1,1 -78,0"/></defs><text><textPath href="#ring-wa" textLength="240">fala connosco • whatsapp •</textPath></text></svg>
+    <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="ring-wa" d="M50,50 m-39,0 a39,39 0 1,1 78,0 a39,39 0 1,1 -78,0"/></defs><text><textPath href="#ring-wa" textLength="240">Fala connosco • WhatsApp •</textPath></text></svg>
     <svg class="wa__icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>
   </a>
 

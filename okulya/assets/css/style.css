@@ -358,8 +358,15 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 .hero__after .display-l { font-family: var(--font-display); }
 .hero__after .lede { margin-inline: auto; }
 
-/* zoom mode (set by JS when motion is on). Desktop: the hero is exactly one screen. */
-.hero.is-zoom { height: 100vh; height: 100svh; min-height: 0; padding-bottom: 64px; }
+/* zoom mode (set by JS when motion is on). Desktop: the hero is exactly one screen.
+   The hero stays on screen with CSS sticky inside .hero-pin (made taller by JS), which
+   the browser handles natively, so there is no jump when it starts or stops.
+   Pinned at its bottom: top = screen height - hero height, set by JS (0 when it is one screen). */
+.hero-pin { position: relative; }
+.hero.is-zoom {
+  position: sticky; top: var(--hero-stick, 0px);
+  height: 100vh; height: 100svh; min-height: 0; padding-bottom: 64px;
+}
 .hero.is-zoom .hero__reveal { display: block; clip-path: circle(0px at 50% 50%); }
 .hero.is-zoom .hero__o-img { visibility: hidden; }
 .hero.is-zoom .hero__after { display: grid; }
@@ -395,10 +402,14 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 /* ==========================================================================
    HOME: the day (Soquendo's porthole)
    Base styles = static, readable list (no JS / reduced motion).
-   .is-live = pinned scroll story.
+   .is-live = scroll story: the stage stays on screen (CSS sticky) inside
+   the taller .dia__track while the timeline plays.
    ========================================================================== */
 .dia { background: var(--cal); }
-.dia__stage { --bg: var(--cal); --ink: var(--cafe); background: var(--bg); color: var(--ink); }
+/* the day's colours live on the track, so any strip of it that shows
+   (e.g. when a phone's toolbar hides) is the same colour as the stage */
+.dia__track { --bg: var(--cal); --ink: var(--cafe); background: var(--bg); color: var(--ink); }
+.dia__stage { background: var(--bg); color: var(--ink); }
 .dia .duo .light { color: inherit; opacity: .45; }
 .dia__intro { padding: clamp(80px, 12vw, 160px) var(--gutter) 40px; text-align: center; display: grid; justify-items: center; gap: 18px; }
 .dia__intro .lede { margin-inline: auto; }
@@ -414,14 +425,13 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 }
 .dia__img { position: absolute; inset: 0; overflow: hidden; }
 .dia__img img { width: 100%; height: 100%; object-fit: cover; }
-.dia__img--open { display: grid; place-items: center; background: var(--mel); }
-.dia__img--open img { width: 62%; height: auto; object-fit: contain; }
-.dia__img--open span { position: absolute; font-family: var(--font-display); font-size: clamp(3rem, 9vw, 8rem); color: var(--cafe); bottom: 14%; }
 .dia__caption { display: grid; gap: 18px; justify-items: start; }
 .dia__caption p.desc { max-width: 38ch; color: inherit; opacity: .78; }
 
 /* live mode */
+.dia.is-live .dia__track { position: relative; }
 .dia.is-live .dia__stage {
+  position: sticky; top: 0;
   height: 100vh; height: 100svh; max-width: none; padding: 0; overflow: hidden;
 }
 .dia.is-live .dia__steps { position: absolute; inset: 0; }
@@ -434,37 +444,49 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
   width: var(--r2); height: var(--r2); translate: -50% -50%;
   background: transparent;
 }
-.dia.is-live .dia__step:first-child .dia__circle { background: var(--mel); }
 .dia.is-live .dia__img { will-change: transform; }
 .dia.is-live .dia__caption {
-  position: absolute; top: 50%; translate: 0 -50%;
+  position: absolute; z-index: 22; top: 50%; translate: 0 -50%;
   left: calc(50% + min(32vh, 32vw, 320px) + clamp(28px, 4vw, 72px));
-  width: min(30vw, 380px);
+  /* whatever is left between the circle and the right gutter, up to 380px */
+  width: min(380px, calc(50% - min(32vh, 32vw, 320px) - clamp(28px, 4vw, 72px) - var(--gutter)));
   opacity: 0; visibility: hidden;
 }
+/* the moments of the day as a quiet ruler: one tick each, only the current
+   moment is named; its tick stretches out in amber. Hover/focus names the others. */
 .dia.is-live .dia__index {
-  display: grid; gap: 4px; position: absolute; z-index: 2; top: 50%; translate: 0 -50%; left: var(--gutter);
+  display: grid; gap: 2px; position: absolute; z-index: 25; top: 50%; translate: 0 -50%; left: var(--gutter);
 }
 .dia__index button {
-  display: grid; grid-template-columns: 14px auto; align-items: center; gap: 10px; text-align: left;
-  padding: 6px 0; font-size: .95rem; color: inherit; opacity: .45; transition: opacity .3s;
+  display: flex; align-items: center; gap: 14px; height: 26px; padding: 0 8px 0 0; color: inherit; text-align: left;
 }
-.dia__index button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; transition: transform .3s, background-color .3s; }
-.dia__index button.is-active { opacity: 1; }
-.dia__index button.is-active::before { background: var(--ambar); transform: scale(1.7); }
-.dia__index small { display: block; font-size: .78rem; opacity: .8; }
+.dia__index i {
+  display: block; flex: none; width: 18px; height: 2px; border-radius: 2px;
+  background: currentColor; opacity: .28;
+  transition: width .6s var(--ease), opacity .3s, background-color .3s;
+}
+.dia__index span {
+  font-size: .95rem; font-weight: 500; white-space: nowrap;
+  opacity: 0; transform: translateX(-8px);
+  transition: opacity .35s, transform .5s var(--ease);
+}
+.dia__index button:hover i, .dia__index button:focus-visible i { opacity: .6; }
+.dia__index button:hover span, .dia__index button:focus-visible span { opacity: .55; transform: none; }
+.dia__index button.is-active i { width: 56px; opacity: 1; background: var(--ambar); }
+.dia__index button.is-active span { opacity: 1; transform: none; }
 .dia.is-live .dia__sun {
   display: block; position: absolute; left: 0; top: 0; z-index: 1;
   width: clamp(38px, 4.4vw, 60px); aspect-ratio: 1; border-radius: 50%; translate: -50% -50%;
   background: radial-gradient(circle at 35% 35%, #FFE3A8, var(--ambar) 70%);
   box-shadow: 0 0 60px 10px rgba(238, 155, 34, .35);
 }
+/* above every circle (the circles are stacked with z-index 1–7) */
 .dia.is-live .dia__cutout {
-  display: block; position: absolute; z-index: 3; width: min(30vh, 30vw, 300px);
+  display: block; position: absolute; z-index: 20; width: min(30vh, 30vw, 300px);
   filter: drop-shadow(0 26px 30px rgba(0, 0, 0, .3));
   opacity: 0;
 }
-.dia__cutout--a { left: calc(50% + min(18vh, 18vw)); top: calc(50% + min(10vh, 10vw)); }
+.dia__cutout--a { left: calc(50% + min(6vh, 6vw)); top: calc(50% + min(16vh, 16vw)); }
 .dia__cutout--b { right: calc(50% + min(16vh, 16vw)); top: calc(50% + min(6vh, 6vw)); }
 .dia.is-live .dia__hint {
   position: absolute; left: 50%; bottom: 18px; translate: -50% 0; font-size: .85rem; opacity: .6;
@@ -680,16 +702,16 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
   .site-footer { position: sticky; bottom: 0; }
 }
 .footer__grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
-.footer__grid h2 { font-size: clamp(2rem, 3.4vw, 3rem); max-width: 12ch; }
+.footer__grid h2 { font-size: clamp(1.6rem, 2.3vw, 2.4rem); white-space: nowrap; }
 .footer__grid h3 { font-family: var(--font-body); font-size: .95rem; font-weight: 600; color: var(--mel); margin-bottom: 14px; }
 .footer__grid li + li { margin-top: 6px; }
 .footer__grid a { text-decoration: none; opacity: .86; transition: opacity .2s, color .2s; }
 .footer__grid a:hover { opacity: 1; color: var(--mel); }
 .footer__word {
   font-family: var(--font-display); color: var(--ambar);
-  /* only the bottom of the letters dips under the edge */
-  font-size: clamp(5rem, 21vw, 21rem); line-height: .78; text-align: center;
-  margin: clamp(40px, 6vw, 80px) 0 0; letter-spacing: -.02em;
+  /* the whole word, descender included, above the bottom edge */
+  font-size: clamp(5rem, 21vw, 21rem); line-height: 1; text-align: center;
+  margin: clamp(32px, 5vw, 64px) 0 0; padding-bottom: clamp(10px, 2vw, 28px); letter-spacing: -.02em;
   white-space: nowrap;
 }
 .footer__links { display: flex; gap: 18px; }
@@ -715,6 +737,8 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
 .wa svg.ring text { font-size: 11.5px; }
 .wa .wa__icon { width: 30px; height: 30px; fill: var(--cal); }
 .menu-open .wa { opacity: 0; pointer-events: none; }
+/* never over the footer, which has its own WhatsApp link */
+.footer-in .wa { opacity: 0; visibility: hidden; transform: translateY(24px) scale(.8); transition: transform .45s var(--ease), opacity .3s, visibility 0s .3s; }
 @media (max-width: 700px) {
   /* smaller on phones, where it would otherwise cover buttons and text */
   .wa { --size: 60px; }
@@ -775,9 +799,6 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
 .menu-item__desc { color: var(--cafe-soft); max-width: 52ch; }
 .menu-note { text-align: center; padding: 28px var(--gutter) 0; color: var(--cafe-soft); font-size: .95rem; }
 
-.times { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-.times li { padding: .5em 1em; border-radius: 999px; background: var(--mel); font-size: .95rem; }
-.times b { font-weight: 600; }
 
 .prato-band { background: var(--ambar); padding-block: clamp(60px, 8vw, 100px); }
 .prato-band .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px; }

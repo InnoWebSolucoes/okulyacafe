@@ -39,8 +39,11 @@
   })();
 
   /* ---------- smooth scroll (Lenis) ---------- */
+  // Mouse/trackpad only. Phones already scroll smoothly, and on touch Lenis can
+  // fight the native momentum (the page bounced back up near the hero).
   let lenis = null;
-  if (!reduce && typeof window.Lenis !== 'undefined') {
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (!reduce && finePointer && typeof window.Lenis !== 'undefined') {
     lenis = new window.Lenis({ lerp: 0.11, smoothWheel: true });
     if (hasGsap) {
       lenis.on('scroll', ScrollTrigger.update);
@@ -74,6 +77,27 @@
   });
 
   /* ---------- header: solid after scrolling, hides going down ---------- */
+  // The footer is showing once the end of <main> is on screen (on desktop the footer
+  // sits underneath the page, so it can't be watched itself). Hides the WhatsApp button.
+  // ScrollTrigger checks the position, so a fling straight to the bottom also counts.
+  const main = $('main');
+  if (main && hasGsap) {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.create({
+      // end beyond the last scroll position: at the very bottom it must still count as inside
+      trigger: main, start: 'bottom bottom', end: () => document.documentElement.scrollHeight * 2,
+      onToggle: (self) => html.classList.toggle('footer-in', self.isActive),
+    });
+  } else if (main && 'IntersectionObserver' in window) {
+    const end = document.createElement('div');
+    end.setAttribute('aria-hidden', 'true');
+    end.style.height = '1px';
+    main.appendChild(end);
+    new IntersectionObserver(([e]) => {
+      html.classList.toggle('footer-in', e.isIntersecting || e.boundingClientRect.top < 0);
+    }).observe(end);
+  }
+
   const header = $('.site-header');
   let lastY = window.scrollY;
   const onScroll = () => {
@@ -261,23 +285,29 @@
       if (!zoomAtLoad) state.open = 1;
       gsap.set(afterLines, { yPercent: 110 });
       gsap.set(afterLede, { autoAlpha: 0, y: 20 });
+
+      // No JS pin: the hero is CSS-sticky inside .hero-pin, which gets the extra scroll
+      // length here. It sticks once its bottom reaches the bottom of the screen (at once
+      // on desktop, where it is one screen tall). Native sticky doesn't jump on phones.
+      const pinBox = hero.parentElement;
+      const size = () => {
+        const h = hero.offsetHeight;
+        hero.style.setProperty('--hero-stick', `${Math.min(0, window.innerHeight - h)}px`);
+        pinBox.style.height = `${h + Math.round(window.innerHeight * 1.4)}px`;
+      };
+      size();
+      ScrollTrigger.addEventListener('refreshInit', size);
       measure(); draw();
 
+      const pinTop = () => pinBox.getBoundingClientRect().top + window.scrollY;
       const z = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
-          trigger: hero,
-          // pin once the bottom of the hero (the word and buttons on phones) is on screen;
-          // on desktop the hero is one screen tall, so that is right at the top
-          start: () => {
-            const top = hero.getBoundingClientRect().top + window.scrollY;
-            return Math.max(top, top + hero.offsetHeight - window.innerHeight);
-          },
-          end: () => `+=${Math.round(window.innerHeight * 1.4)}`,
-          pin: true,
+          trigger: pinBox,
+          start: () => pinTop() + Math.max(0, hero.offsetHeight - window.innerHeight),
+          end: () => pinTop() + pinBox.offsetHeight - window.innerHeight,
           scrub: 0.8,
           invalidateOnRefresh: true,
-          refreshPriority: 1,
           onRefresh: () => { measure(); draw(); },
         },
       });
@@ -292,7 +322,10 @@
         .to({}, { duration: 0.15 });
 
       return () => {
+        ScrollTrigger.removeEventListener('refreshInit', size);
         hero.classList.remove('is-zoom');
+        hero.style.removeProperty('--hero-stick');
+        pinBox.style.height = '';
         if (diaIntro) diaIntro.classList.remove('is-merged');
         reveal.style.transform = '';
         reveal.style.clipPath = '';
@@ -335,9 +368,10 @@
     onEnter: (els) => gsap.to(els, { scale: 1, rotation: 0, autoAlpha: 1, duration: 1.1, ease: 'back.out(1.7)', stagger: 0.3 }),
   });
 
-  /* ---------- the day: pinned porthole story ---------- */
+  /* ---------- the day: porthole story (stage is CSS-sticky inside .dia__track) ---------- */
   const dia = $('.dia');
   if (dia) {
+    const track = $('.dia__track', dia);
     const stage = $('.dia__stage', dia);
     const steps = $$('.dia__step', dia);
     const imgs = steps.map((s) => $('.dia__img', s));
@@ -351,7 +385,11 @@
     const n = steps.length;
 
     dia.classList.add('is-live');
-    gsap.set(stage, { '--bg': '#FFFEFB', '--ink': '#2A1810' });
+    gsap.set(track, { '--bg': '#FFFEFB', '--ink': '#2A1810' });
+    // the track's height is the story's scroll length
+    const sizeTrack = () => { track.style.height = `${stage.offsetHeight + Math.round(n * 0.85 * window.innerHeight)}px`; };
+    sizeTrack();
+    ScrollTrigger.addEventListener('refreshInit', sizeTrack);
     circles.forEach((c, i) => { c.style.zIndex = i + 1; });
     gsap.set(imgs.slice(1), { yPercent: 101 });
     gsap.set(caps[0], { autoAlpha: 1 });
@@ -374,25 +412,29 @@
     };
 
     const T = (i) => 2 * i - 1; // step i starts its transition at T(i), settles at T(i)+1
+    const sunState = { p: 0 };
+    let activeStep = -1;
+    const setActive = (time) => {
+      const active = Math.max(0, Math.min(n - 1, Math.floor((time + 0.5) / 2)));
+      if (active === activeStep) return;
+      activeStep = active;
+      index.forEach((b, i) => {
+        b.classList.toggle('is-active', i === active);
+        if (i === active) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      });
+    };
+    // everything, the sun and the ruler included, follows the smoothed (scrubbed)
+    // timeline rather than the raw scroll, so big scrolls glide instead of jumping
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
+      onUpdate: () => setActive(tl.time()),
       scrollTrigger: {
-        trigger: stage,
+        trigger: track,
         start: 'top top',
-        end: () => `+=${Math.round(n * 0.85 * innerHeight)}`,
-        pin: true,
+        end: 'bottom bottom',
         scrub: 0.7,
         invalidateOnRefresh: true,
-        onRefresh: measure,
-        onUpdate: (self) => {
-          const time = self.progress * tl.duration();
-          placeSun(self.progress);
-          const active = Math.max(0, Math.min(n - 1, Math.floor((time + 0.5) / 2)));
-          index.forEach((b, i) => {
-            b.classList.toggle('is-active', i === active);
-            if (i === active) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
-          });
-        },
+        onRefresh: () => { measure(); placeSun(sunState.p); },
       },
     });
 
@@ -407,9 +449,9 @@
     tl.to({}, { duration: 1 }, T(n - 1) + 1); // hold the last frame
 
     // morning → dusk → night
-    tl.to(stage, { '--bg': '#FBE6C2', duration: 1 }, T(4))
-      .to(stage, { '--bg': '#3A2317', '--ink': '#FFFEFB', duration: 1 }, T(5))
-      .to(stage, { '--bg': '#24140C', duration: 1 }, T(6))
+    tl.to(track, { '--bg': '#FBE6C2', duration: 1 }, T(4))
+      .to(track, { '--bg': '#3A2317', '--ink': '#FFFEFB', duration: 1 }, T(5))
+      .to(track, { '--bg': '#24140C', duration: 1 }, T(6))
       .to(sun, { filter: 'saturate(0) brightness(1.7)', duration: 1 }, T(5));
 
     // plates slide in at lunch and at petiscos
@@ -418,9 +460,8 @@
       .fromTo(cutB, { x: -220, y: 160, rotation: -120, autoAlpha: 0 }, { x: 0, y: 0, rotation: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, T(4) + 0.3)
       .to(cutB, { x: -260, y: 280, rotation: 90, autoAlpha: 0, duration: 0.9, ease: 'power2.in' }, T(5));
     if (hint) tl.to(hint, { autoAlpha: 0, duration: 0.4 }, 0.3);
-
-    // the opening swoosh turns slowly while waiting
-    gsap.to($('.dia__img--open img', dia), { rotation: 360, duration: 40, repeat: -1, ease: 'none' });
+    // the sun crosses the sky over the whole story
+    tl.to(sunState, { p: 1, duration: tl.duration(), ease: 'none', onUpdate: () => placeSun(sunState.p) }, 0);
 
     index.forEach((b, i) => b.addEventListener('click', () => {
       const st = tl.scrollTrigger;
