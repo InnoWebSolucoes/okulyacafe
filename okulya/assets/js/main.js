@@ -10,6 +10,16 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 
   if (!motion) html.classList.add('no-motion');
+
+  // The same files serve innoweb.agency/okulya and the café's own domain, where the
+  // pages sit at the root (okulya.cafe/menu.html). There, drop the /okulya prefix
+  // from page links so each click goes straight to the clean address.
+  if (!location.pathname.startsWith('/okulya')) {
+    $$('a[href^="/okulya"]').forEach((a) => {
+      const m = a.getAttribute('href').match(/^\/okulya(?:\/(?:index\.html)?|\/([a-z]+\.html))?(#.*)?$/);
+      if (m) a.setAttribute('href', `/${m[1] || ''}${m[2] || ''}`);
+    });
+  }
   setTimeout(() => html.classList.remove('is-entering'), 1300);
 
   /* ---------- small facts ---------- */
@@ -38,25 +48,13 @@
     els.forEach((el) => { el.textContent = text; el.classList.toggle('is-open', open); });
   })();
 
-  /* ---------- smooth scroll (Lenis) ---------- */
-  // Mouse/trackpad only. Phones already scroll smoothly, and on touch Lenis can
-  // fight the native momentum (the page bounced back up near the hero).
-  let lenis = null;
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (!reduce && finePointer && typeof window.Lenis !== 'undefined') {
-    lenis = new window.Lenis({ lerp: 0.11, smoothWheel: true });
-    if (hasGsap) {
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((t) => lenis.raf(t * 1000));
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
-      requestAnimationFrame(raf);
-    }
-  }
+  /* ---------- scrolling ---------- */
+  // Native scrolling only. A JS smooth-scroll (Lenis) moved the page from the main
+  // thread every frame, so any busy frame made the whole page, sticky headings
+  // included, stutter. The browser scrolls on its own thread; the scroll-linked
+  // animations are smoothed by ScrollTrigger's scrub instead.
   const scrollToY = (y) => {
-    if (lenis) lenis.scrollTo(y, { duration: 1.4 });
-    else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
   };
   const scrollToEl = (el, offset = 0) => {
     const y = el.getBoundingClientRect().top + window.scrollY - offset;
@@ -77,6 +75,16 @@
   });
 
   /* ---------- header: solid after scrolling, hides going down ---------- */
+  // Desktop footer reveal (sticky under the page) only when the whole footer fits on screen.
+  const footer = $('.site-footer');
+  const fitFooter = () => {
+    if (!footer) return;
+    const fits = window.innerWidth > 960 && footer.offsetHeight <= window.innerHeight;
+    html.classList.toggle('footer-reveal', fits);
+  };
+  fitFooter();
+  window.addEventListener('resize', fitFooter);
+
   // The footer is showing once the end of <main> is on screen (on desktop the footer
   // sits underneath the page, so it can't be watched itself). Hides the WhatsApp button.
   // ScrollTrigger checks the position, so a fling straight to the bottom also counts.
@@ -122,7 +130,6 @@
     html.classList.remove('menu-open');
     toggle && toggle.setAttribute('aria-expanded', 'false');
     toggle && (toggle.querySelector('b').textContent = 'Abrir menu');
-    lenis && lenis.start();
   }
   if (toggle && mobileMenu) {
     toggle.addEventListener('click', () => {
@@ -131,7 +138,6 @@
       html.classList.add('menu-open');
       toggle.setAttribute('aria-expanded', 'true');
       toggle.querySelector('b').textContent = 'Fechar menu';
-      lenis && lenis.stop();
       setTimeout(() => { const first = $('a', mobileMenu); first && first.focus({ preventScroll: true }); }, 350);
     });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && html.classList.contains('menu-open')) { closeMenu(); toggle.focus(); } });
@@ -384,8 +390,15 @@
     const hint = $('.dia__hint', dia);
     const n = steps.length;
 
+    const dusk = $('.dia__sky--dusk', dia);
+    const night = $('.dia__sky--night', dia);
+
     dia.classList.add('is-live');
-    gsap.set(track, { '--bg': '#FFFEFB', '--ink': '#2A1810' });
+    // Desktop: move the sun out of the page so it can travel above the top bar,
+    // which slides back in when you scroll up. Its coordinates don't change: the
+    // stage sits at the top-left of the screen while the story plays.
+    const floatSun = window.matchMedia('(min-width: 961px)').matches;
+    if (floatSun) { document.body.appendChild(sun); sun.classList.add('is-floating'); }
     // the track's height is the story's scroll length
     const sizeTrack = () => { track.style.height = `${stage.offsetHeight + Math.round(n * 0.85 * window.innerHeight)}px`; };
     sizeTrack();
@@ -404,11 +417,14 @@
       const r = c.width / 2;
       geo = { cx: c.left - s.left + r, cy: c.top - s.top + r, R: r + Math.min(90, Math.max(26, innerWidth * 0.05)) };
     };
+    const sunX = gsap.quickSetter(sun, 'x', 'px');
+    const sunY = gsap.quickSetter(sun, 'y', 'px');
     const placeSun = (p) => {
       // rises just below the left horizon and ends high on the right as the moon,
       // clear of the caption column
       const theta = Math.PI + 0.3 - p * (Math.PI + 0.3 - Math.PI / 5);
-      gsap.set(sun, { x: geo.cx + geo.R * Math.cos(theta), y: geo.cy - geo.R * Math.sin(theta) });
+      sunX(geo.cx + geo.R * Math.cos(theta));
+      sunY(geo.cy - geo.R * Math.sin(theta));
     };
 
     const T = (i) => 2 * i - 1; // step i starts its transition at T(i), settles at T(i)+1
@@ -435,6 +451,7 @@
         scrub: 0.7,
         invalidateOnRefresh: true,
         onRefresh: () => { measure(); placeSun(sunState.p); },
+        onToggle: (self) => { if (floatSun) sun.classList.toggle('is-on', self.isActive); },
       },
     });
 
@@ -448,10 +465,10 @@
     }
     tl.to({}, { duration: 1 }, T(n - 1) + 1); // hold the last frame
 
-    // morning → dusk → night
-    tl.to(track, { '--bg': '#FBE6C2', duration: 1 }, T(4))
-      .to(track, { '--bg': '#3A2317', '--ink': '#FFFEFB', duration: 1 }, T(5))
-      .to(track, { '--bg': '#24140C', duration: 1 }, T(6))
+    // morning → dusk → night: colour layers fade in, text turns light for the night
+    tl.to(dusk, { opacity: 1, duration: 1 }, T(4))
+      .to(night, { opacity: 1, duration: 1.4 }, T(5))
+      .to(stage, { color: '#FFFEFB', duration: 1 }, T(5))
       .to(sun, { filter: 'saturate(0) brightness(1.7)', duration: 1 }, T(5));
 
     // plates slide in at lunch and at petiscos
@@ -561,7 +578,7 @@
     const target = location.hash && document.getElementById(location.hash.slice(1));
     if (target) setTimeout(() => {
       const y = target.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(target).scrollMarginTop) || 0);
-      if (lenis) lenis.scrollTo(y, { immediate: true }); else window.scrollTo(0, y);
+      window.scrollTo(0, y);
     }, 60);
   });
 })();

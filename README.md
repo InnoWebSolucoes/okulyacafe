@@ -36,7 +36,7 @@ The header, mobile menu, contact section ("encontra-nos") and footer are repeate
 ```
 okulya/assets/css/style.css   design tokens at the top (:root), then sections in page order
 okulya/assets/js/main.js      all interactions; each block checks the element exists first
-okulya/assets/vendor/         GSAP 3.13 + ScrollTrigger, Lenis (self-hosted, no CDN)
+okulya/assets/vendor/         GSAP 3.13 + ScrollTrigger (self-hosted, no CDN). Scrolling is native: no smooth-scroll library, it made the page stutter
 okulya/assets/img/            optimised WebP; instagram/ holds thumbnails from @0kulya.cafe
 vercel.json                   sends / to /okulya
 ```

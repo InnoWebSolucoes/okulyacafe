@@ -121,6 +121,8 @@
       <!-- dia__track is the scroll length of the story; the stage stays on screen inside it (CSS sticky) -->
       <div class="dia__track">
       <div class="dia__stage">
+        <div class="dia__sky dia__sky--dusk" aria-hidden="true"></div>
+        <div class="dia__sky dia__sky--night" aria-hidden="true"></div>
         <div class="dia__sun" aria-hidden="true"></div>
         <nav class="dia__index" aria-label="Momentos do dia">
           <button type="button" data-step="0" aria-label="Abertura, 7h"><i></i><span>Abertura</span></button>
@@ -437,10 +439,11 @@
       </div>
       <div class="footer__legal">
         <span>© <span data-year>2026</span> Okulya Café, Talatona, Luanda</span>
+        <a class="footer__credit" href="https://innoweb.agency" target="_blank" rel="noopener">Made by Innoweb Agency Solutions</a>
         <span class="footer__links"><a href="/okulya/menu.html">Menu</a><a href="/okulya/sobre.html">Sobre</a><a href="/okulya/experiencias.html">Experiências</a></span>
       </div>
     </div>
-    <p class="footer__word" aria-hidden="true">Okulya</p>
+    <p class="footer__word" aria-hidden="true">okulya</p>
   </footer>
 
   <a class="sticker wa" href="https://wa.me/244933002904?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Okulya%20Caf%C3%A9." target="_blank" rel="noopener" aria-label="Fala connosco no WhatsApp">
@@ -454,7 +457,6 @@
 
   <script src="/okulya/assets/vendor/gsap.min.js" defer></script>
   <script src="/okulya/assets/vendor/ScrollTrigger.min.js" defer></script>
-  <script src="/okulya/assets/vendor/lenis.min.js" defer></script>
   <script src="/okulya/assets/js/main.js" defer></script>
 </body>
 </html>

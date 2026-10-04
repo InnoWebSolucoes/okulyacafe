@@ -1,9 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
-    { "source": "/", "destination": "/okulya", "permanent": false }
+    { "source": "/okulya", "has": [{ "type": "host", "value": "okulya.cafe" }], "destination": "/", "permanent": true },
+    { "source": "/okulya/", "has": [{ "type": "host", "value": "okulya.cafe" }], "destination": "/", "permanent": true },
+    { "source": "/okulya/index.html", "has": [{ "type": "host", "value": "okulya.cafe" }], "destination": "/", "permanent": true },
+    { "source": "/okulya/:page(menu|sobre|experiencias).html", "has": [{ "type": "host", "value": "okulya.cafe" }], "destination": "/:page.html", "permanent": true },
+    { "source": "/", "missing": [{ "type": "host", "value": "okulya.cafe" }], "destination": "/okulya", "permanent": false }
   ],
   "rewrites": [
+    { "source": "/", "has": [{ "type": "host", "value": "okulya.cafe" }], "destination": "/okulya/index.html" },
+    { "source": "/:page(menu|sobre|experiencias).html", "has": [{ "type": "host", "value": "okulya.cafe" }], "destination": "/okulya/:page.html" },
     { "source": "/okulya", "destination": "/okulya/index.html" }
   ]
 }

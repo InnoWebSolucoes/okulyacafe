@@ -30,9 +30,6 @@
 /* ---------- reset ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
 body {
   margin: 0;
   background: var(--cal);
@@ -170,8 +167,7 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 }
 .site-header.is-scrolled {
   --header-h: 74px;
-  background: rgba(255, 254, 251, .88);
-  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  background: rgba(255, 254, 251, .97);
   box-shadow: 0 1px 0 var(--line);
 }
 .site-header.is-hidden { transform: translateY(-105%); }
@@ -238,7 +234,7 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 .mobile-menu__blob {
   position: absolute; z-index: -1; right: -30vw; bottom: -10vh; width: 90vw; aspect-ratio: 1;
   background: var(--mel); border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
-  animation: blob 14s ease-in-out infinite alternate;
+  animation: blob 40s linear infinite;
 }
 
 @media (max-width: 960px) {
@@ -248,16 +244,18 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
   .is-scrolled .brand { width: 54px; height: 54px; }
   .nav { display: none; }
   .menu-toggle { display: grid; }
-  .menu-open .site-header { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; transform: none; }
+  .menu-open .site-header { background: transparent; box-shadow: none; transform: none; }
 }
 
 /* ==========================================================================
    Shared shapes
    ========================================================================== */
+/* the organic shape slowly turns and breathes; transform only, so the GPU
+   handles it (animating the border-radius repainted it on every frame) */
 @keyframes blob {
-  0%   { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
-  50%  { border-radius: 58% 42% 38% 62% / 55% 61% 39% 45%; }
-  100% { border-radius: 36% 64% 54% 46% / 62% 38% 62% 38%; }
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.04); }
+  100% { transform: rotate(360deg) scale(1); }
 }
 .scallop { clip-path: var(--scallop); }
 
@@ -296,15 +294,19 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 .hero__stage { position: relative; z-index: 1; aspect-ratio: 1; width: min(100%, 640px); justify-self: center; }
 .hero__blob {
   position: absolute; inset: 6%;
+}
+/* the shape turns on its own layer, so the entrance tween on .hero__blob doesn't fight it */
+.hero__blob::before {
+  content: ""; position: absolute; inset: 0;
   background: var(--ambar);
   border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
-  animation: blob 12s ease-in-out infinite alternate;
+  animation: blob 36s linear infinite; will-change: transform;
 }
-.hero__plates { position: absolute; inset: 0; }
+.hero__plates { position: absolute; inset: 0; will-change: transform; }
 .hero__plate {
   position: absolute; inset: 9%; width: 82%; height: 82%; object-fit: contain;
   filter: drop-shadow(0 30px 40px rgba(42, 24, 16, .28));
-  opacity: 0;
+  opacity: 0; will-change: transform, opacity;
 }
 .hero__plate.is-active { opacity: 1; }
 .hero__sticker { position: absolute; right: -2%; top: 2%; --size: clamp(104px, 11vw, 150px); --bg: var(--ceu); }
@@ -406,10 +408,13 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
    the taller .dia__track while the timeline plays.
    ========================================================================== */
 .dia { background: var(--cal); }
-/* the day's colours live on the track, so any strip of it that shows
-   (e.g. when a phone's toolbar hides) is the same colour as the stage */
-.dia__track { --bg: var(--cal); --ink: var(--cafe); background: var(--bg); color: var(--ink); }
-.dia__stage { background: var(--bg); color: var(--ink); }
+.dia__stage { background: var(--cal); color: var(--cafe); }
+/* morning → dusk → night: two colour layers that fade in (opacity runs on the GPU;
+   animating a colour variable restyled the whole section on every frame) */
+.dia__sky { display: none; }
+.dia.is-live .dia__sky { display: block; position: absolute; inset: 0; z-index: 0; opacity: 0; pointer-events: none; will-change: opacity; }
+.dia__sky--dusk { background: #FBE6C2; }
+.dia__sky--night { background: linear-gradient(180deg, #24140C, #3A2317); }
 .dia .duo .light { color: inherit; opacity: .45; }
 .dia__intro { padding: clamp(80px, 12vw, 160px) var(--gutter) 40px; text-align: center; display: grid; justify-items: center; gap: 18px; }
 .dia__intro .lede { margin-inline: auto; }
@@ -425,6 +430,7 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 }
 .dia__img { position: absolute; inset: 0; overflow: hidden; }
 .dia__img img { width: 100%; height: 100%; object-fit: cover; }
+.dia.is-live .dia__img img, .dia.is-live .dia__caption, .dia.is-live .dia__cutout { will-change: transform, opacity; }
 .dia__caption { display: grid; gap: 18px; justify-items: start; }
 .dia__caption p.desc { max-width: 38ch; color: inherit; opacity: .78; }
 
@@ -474,12 +480,20 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 .dia__index button:hover span, .dia__index button:focus-visible span { opacity: .55; transform: none; }
 .dia__index button.is-active i { width: 56px; opacity: 1; background: var(--ambar); }
 .dia__index button.is-active span { opacity: 1; transform: none; }
-.dia.is-live .dia__sun {
+.dia.is-live .dia__sun, .dia__sun.is-floating {
   display: block; position: absolute; left: 0; top: 0; z-index: 1;
   width: clamp(38px, 4.4vw, 60px); aspect-ratio: 1; border-radius: 50%; translate: -50% -50%;
   background: radial-gradient(circle at 35% 35%, #FFE3A8, var(--ambar) 70%);
   box-shadow: 0 0 60px 10px rgba(238, 155, 34, .35);
+  will-change: transform, filter;
 }
+/* desktop: the sun lives outside the page, above the top bar (which would
+   otherwise hide it when it slides back in), and shows only during the story */
+.dia__sun.is-floating {
+  position: fixed; z-index: 110; pointer-events: none;
+  opacity: 0; transition: opacity .35s;
+}
+.dia__sun.is-floating.is-on { opacity: 1; }
 /* above every circle (the circles are stacked with z-index 1–7) */
 .dia.is-live .dia__cutout {
   display: block; position: absolute; z-index: 20; width: min(30vh, 30vw, 300px);
@@ -536,6 +550,7 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 .cat { display: grid; justify-items: center; gap: 14px; text-align: center; text-decoration: none; }
 .cat__badge {
   position: relative; width: 100%; max-width: 250px; aspect-ratio: 1; display: grid; place-items: center;
+  will-change: transform;
 }
 .cat__badge::before {
   content: ""; position: absolute; inset: 0; background: var(--c, var(--cal)); clip-path: var(--scallop);
@@ -698,9 +713,9 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
   position: relative; z-index: 0; background: var(--cafe); color: var(--cal);
   padding: clamp(64px, 8vw, 110px) 0 0; overflow: hidden;
 }
-@media (min-width: 961px) and (min-height: 760px) {
-  .site-footer { position: sticky; bottom: 0; }
-}
+/* revealed from underneath the page, but only when the whole footer fits on
+   screen (JS sets .footer-reveal); a taller footer would have its top cut off */
+.footer-reveal .site-footer { position: sticky; bottom: 0; }
 .footer__grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
 .footer__grid h2 { font-size: clamp(1.6rem, 2.3vw, 2.4rem); white-space: nowrap; }
 .footer__grid h3 { font-family: var(--font-body); font-size: .95rem; font-weight: 600; color: var(--mel); margin-bottom: 14px; }
@@ -709,15 +724,22 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
 .footer__grid a:hover { opacity: 1; color: var(--mel); }
 .footer__word {
   font-family: var(--font-display); color: var(--ambar);
-  /* the whole word, descender included, above the bottom edge */
-  font-size: clamp(5rem, 21vw, 21rem); line-height: 1; text-align: center;
-  margin: clamp(32px, 5vw, 64px) 0 0; padding-bottom: clamp(10px, 2vw, 28px); letter-spacing: -.02em;
+  /* the whole word, descender included, with clear space under it */
+  font-size: clamp(5rem, 19vw, 19rem); line-height: 1; text-align: center;
+  margin: clamp(32px, 5vw, 64px) 0 0; padding-bottom: clamp(36px, 5vw, 80px); letter-spacing: -.02em;
   white-space: nowrap;
 }
+.footer__credit {
+  color: var(--mel); font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
+  opacity: 1;
+}
+.footer__credit:hover { color: var(--cal); }
 .footer__links { display: flex; gap: 18px; }
 .footer__links a { text-decoration: none; }
 .footer__links a:hover { color: var(--mel); }
-.footer__legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; font-size: .88rem; opacity: .7; padding-top: 28px; border-top: 1px solid rgba(255, 254, 251, .16); margin-top: 48px; }
+.footer__legal { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 24px; font-size: .88rem; padding-top: 28px; border-top: 1px solid rgba(255, 254, 251, .16); margin-top: 48px; }
+.footer__legal > span { opacity: .7; }
+.footer__legal .footer__credit { font-size: .95rem; }
 
 @media (max-width: 900px) {
   .footer__grid { grid-template-columns: 1fr 1fr; }
@@ -769,7 +791,7 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
 .menu-nav {
   position: sticky; top: 74px; z-index: 40;
   padding: 14px var(--gutter);
-  background: rgba(255, 254, 251, .9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  background: rgba(255, 254, 251, .97);
   transition: top .55s var(--ease);
 }
 .header-hidden .menu-nav { top: 0; }
@@ -788,7 +810,7 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
 .menu-section:nth-of-type(even) { background: #FFF7E8; }
 .menu-section__grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: clamp(32px, 6vw, 100px); align-items: start; }
 .menu-section__aside { position: sticky; top: 190px; display: grid; gap: 14px; justify-items: start; }
-.menu-section__aside img { width: min(100%, 320px); margin-top: 18px; filter: drop-shadow(0 22px 26px rgba(42, 24, 16, .24)); }
+.menu-section__aside img { width: min(100%, 320px); margin-top: 18px; filter: drop-shadow(0 22px 26px rgba(42, 24, 16, .24)); will-change: transform; }
 .menu-list { display: grid; }
 .menu-item { display: grid; gap: 6px; padding-block: 22px; border-bottom: 1px solid var(--line); }
 .menu-item:first-child { padding-top: 0; }
@@ -889,7 +911,7 @@ main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip;
 .exp-row__media .shape img { width: 100%; height: 100%; object-fit: cover; }
 .exp-row:nth-child(1) .shape { border-radius: 200px 200px 32px 32px; }
 .exp-row:nth-child(2) .shape { clip-path: var(--scallop); aspect-ratio: 1; }
-.exp-row:nth-child(3) .shape { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; aspect-ratio: 1; animation: blob 14s ease-in-out infinite alternate; }
+.exp-row:nth-child(3) .shape { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; aspect-ratio: 1; }
 .exp-row__media .sticker { position: absolute; left: -4%; top: -4%; --size: clamp(110px, 11vw, 150px); }
 .exp-row__copy { display: grid; gap: 20px; justify-items: start; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
