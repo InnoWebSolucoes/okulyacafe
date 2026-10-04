@@ -33,6 +33,7 @@ assets/img/            optimised WebP; instagram/ holds thumbnails from @0kulya.
 
 - **Colours:** whitewash `#FFFEFB`, espresso `#2A1810`, amber `#EE9B22` (from the logo swoosh), honey `#FFD48A`, sky `#A9D8EA` (the café's window frames).
 - **Type:** Caprasimo for display headings, Hanken Grotesk for body text, both from Google Fonts. Headings are lowercase, like the logo.
+- **Hero:** the "o" of "okulya" is a window onto the café wall (`parede-okulya.webp`, a real photo from the okulyacafe2 project). Scrolling pins the hero and opens the "o" until the photo fills the screen and "um dia no okulya" appears on it. This only runs where the hero fits one screen (desktop at least 640px tall, phones at least 740px tall). Elsewhere the "o" is a static photo.
 - **Signature moment:** the pinned porthole on the homepage. As you scroll, photos rise through one circle, the sun arcs across, and the page goes from morning to night.
 - **Motion respects `prefers-reduced-motion`.** With reduced motion, or without JS, every section renders as a normal static page.
 

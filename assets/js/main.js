@@ -200,22 +200,114 @@
      ====================================================================== */
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ---------- hero entrance: one orchestrated moment after the wipe ---------- */
+  /* ---------- hero: entrance, then the "o" opens into the café on scroll ---------- */
   const hero = $('.hero');
   if (hero) {
-    const syl = $$('.hero__word .line-mask > span', hero);
+    const letters = $$('.hero__l > span', hero);
     const items = $$('[data-hero-item]', hero);
+    const reveal = $('.hero__reveal', hero);
+    const revealImg = $('.hero__reveal-img', hero);
+    const shade = $('.hero__shade', hero);
+    const o = $('.hero__o', hero);
+    const oImg = $('.hero__o-img', hero);
+    const swoosh = $('.hero__swoosh', hero);
+    const cue = $('.hero__cue', hero);
+    const heroStage = $('.hero__stage', hero);
+    const afterLines = $$('.hero__after .line-mask > span', hero);
+    const afterLede = $('.hero__after .lede', hero);
+    const diaIntro = $('.dia__intro');
+
+    // The zoom needs the whole hero on one screen, so it only runs where that fits.
+    const ZOOM = '(min-width: 861px) and (min-height: 640px), (max-width: 860px) and (min-height: 740px)';
+    const STILL = '(min-width: 861px) and (max-height: 639px), (max-width: 860px) and (max-height: 739px)';
+    const zoomAtLoad = window.matchMedia(ZOOM).matches;
+
+    // The photo layer covers the whole hero. It is shrunk and moved so its
+    // inscribed circle sits exactly on the "o". p: 0 = the "o", 1 = full screen.
+    const geo = { x: 0, y: 0, s: 1, r0: 0, rEnd: 0 };
+    const state = { p: 0, open: zoomAtLoad ? 0 : 1 };
+    const measure = () => {
+      const hr = hero.getBoundingClientRect();
+      const or = o.getBoundingClientRect();
+      const W = hr.width; const H = hr.height;
+      geo.r0 = Math.min(W, H) / 2;
+      geo.rEnd = Math.hypot(W, H) / 2 + 2;
+      geo.s = or.width / 2 / geo.r0;
+      geo.x = or.left - hr.left + or.width / 2 - W / 2;
+      geo.y = or.top - hr.top + or.height / 2 - H / 2;
+    };
+    const draw = () => {
+      const { p } = state;
+      const s = geo.s + (1 - geo.s) * p;
+      const r = (geo.r0 + (geo.rEnd - geo.r0) * p) * state.open;
+      reveal.style.transform = `translate3d(${geo.x * (1 - p)}px, ${geo.y * (1 - p)}px, 0) scale(${s})`;
+      reveal.style.clipPath = `circle(${r}px at 50% 50%)`;
+    };
+
+    const mm = gsap.matchMedia();
+    mm.add({ zoom: ZOOM, still: STILL }, (ctx) => {
+      if (!ctx.conditions.zoom) {
+        // short screens: a normal hero whose blob drifts up as you leave
+        gsap.to(heroStage, { yPercent: -12, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+        return undefined;
+      }
+      hero.classList.add('is-zoom');
+      if (diaIntro) diaIntro.classList.add('is-merged'); // its heading now appears on the photo
+      if (!zoomAtLoad) state.open = 1;
+      gsap.set(afterLines, { yPercent: 110 });
+      gsap.set(afterLede, { autoAlpha: 0, y: 20 });
+      measure(); draw();
+
+      const z = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: () => `+=${Math.round(window.innerHeight * 1.4)}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          refreshPriority: 1,
+          onRefresh: () => { measure(); draw(); },
+        },
+      });
+      const out = { immediateRender: false, ease: 'power2.in' };
+      z.to(state, { p: 1, duration: 1, ease: 'power2.inOut', onUpdate: draw }, 0)
+        .fromTo(letters, { yPercent: 0, autoAlpha: 1 }, { yPercent: -60, autoAlpha: 0, stagger: 0.03, duration: 0.35, ...out }, 0)
+        .fromTo([swoosh, ...items, cue], { y: 0, autoAlpha: 1 }, { y: -40, autoAlpha: 0, stagger: 0.04, duration: 0.3, ...out }, 0)
+        .fromTo(heroStage, { scale: 1, autoAlpha: 1 }, { scale: 0.7, autoAlpha: 0, duration: 0.4, ...out }, 0)
+        .to(shade, { opacity: 1, duration: 0.4 }, 0.55)
+        .to(afterLines, { yPercent: 0, duration: 0.35, stagger: 0.06, ease: 'power3.out' }, 0.7)
+        .to(afterLede, { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power2.out' }, 0.8)
+        .to({}, { duration: 0.15 });
+
+      return () => {
+        hero.classList.remove('is-zoom');
+        if (diaIntro) diaIntro.classList.remove('is-merged');
+        reveal.style.transform = '';
+        reveal.style.clipPath = '';
+      };
+    });
+
+    // entrance: one orchestrated moment after the page wipe
     const tl = gsap.timeline({ delay: 0.55, defaults: { ease: 'expo.out' } });
     tl.from('.hero__blob', { scale: 0.4, rotation: -30, duration: 1.4, ease: 'back.out(1.3)' }, 0)
       .fromTo(plates[0], { rotation: 160, scale: 0.5, autoAlpha: 0 }, { rotation: 0, scale: 1, autoAlpha: 1, duration: 1.4, ease: 'back.out(1.3)' }, 0.2)
-      .from(syl, { yPercent: 115, duration: 1.2, stagger: 0.18 }, 0.1)
-      .fromTo('.hero__swoosh', { clipPath: 'inset(0% 100% 0% 0%)', rotation: -26 }, { clipPath: 'inset(0% 0% 0% 0%)', rotation: -6, duration: 1.4, ease: 'power3.inOut' }, 0.5)
-      .from(items, { y: 28, autoAlpha: 0, duration: 0.9, stagger: 0.18 }, 0.6)
+      .from(letters, { yPercent: 115, duration: 1.2, stagger: 0.07 }, 0.3)
+      .fromTo(swoosh, { clipPath: 'inset(0% 100% 0% 0%)', rotation: -26 }, { clipPath: 'inset(0% 0% 0% 0%)', rotation: -6, duration: 1.4, ease: 'power3.inOut' }, 0.6)
+      .from(items, { y: 28, autoAlpha: 0, duration: 0.9, stagger: 0.18 }, 0.7)
       .from('.hero__sticker', { scale: 0, rotation: -120, duration: 1, ease: 'back.out(1.8)' }, 0.9)
       .from('.hero__dots, .hero__cue', { autoAlpha: 0, duration: 0.8 }, 1.2);
+    if (zoomAtLoad) {
+      // the photo opens up inside the "o"
+      tl.to(state, { open: 1, duration: 1.6, ease: 'expo.inOut', onUpdate: draw }, 0)
+        .fromTo(revealImg, { scale: 1.4, rotation: -10 }, { scale: 1, rotation: 0, duration: 2.2 }, 0);
+    } else {
+      tl.from(oImg, { scale: 0, rotation: -90, duration: 1.3, ease: 'back.out(1.4)' }, 0.1);
+    }
     gsap.to('.hero__plates', { rotation: 360, duration: 90, repeat: -1, ease: 'none' });
-    // the blob drifts up as you leave the hero
-    gsap.to('.hero__stage', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    // the "o" is measured from the web font's metrics, so re-measure once it loads
+    if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
   }
 
   /* ---------- section titles rise out of their masks ---------- */

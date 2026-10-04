@@ -16,6 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preload" as="image" href="assets/img/parede-okulya.webp">
   <script>document.documentElement.classList.add('js', 'is-entering');</script>
 </head>
 <body data-page="home">
@@ -57,6 +58,12 @@
 
     <!-- ============ HERO ============ -->
     <section class="hero" aria-labelledby="hero-title">
+      <!-- The photo seen through the "o". With motion, scrolling opens it until it fills the screen. -->
+      <div class="hero__reveal" aria-hidden="true">
+        <img class="hero__reveal-img" src="assets/img/parede-okulya.webp" alt="" width="1920" height="1080" fetchpriority="high">
+        <div class="hero__shade"></div>
+      </div>
+
       <div class="hero__stage">
         <div class="hero__blob" aria-hidden="true"></div>
         <div class="hero__plates">
@@ -78,11 +85,10 @@
       </div>
 
       <div class="hero__copy">
-        <h1 class="hero__word" id="hero-title" aria-label="Okulya Café">
+        <h1 class="hero__word" id="hero-title">
+          <span class="visually-hidden">Okulya Café</span>
           <img class="hero__swoosh" src="assets/img/swoosh.webp" alt="" width="900" height="705" aria-hidden="true">
-          <span class="line-mask" aria-hidden="true"><span>o</span></span>
-          <span class="line-mask syl-2" aria-hidden="true"><span>ku</span></span>
-          <span class="line-mask syl-3" aria-hidden="true"><span>lya</span></span>
+          <span class="hero__o" aria-hidden="true"><img class="hero__o-img" src="assets/img/parede-okulya-o.webp" alt="" width="480" height="480"></span><span class="hero__letters" aria-hidden="true"><span class="hero__l"><span>k</span></span><span class="hero__l"><span>u</span></span><span class="hero__l"><span>l</span></span><span class="hero__l"><span>y</span></span><span class="hero__l"><span>a</span></span></span>
         </h1>
         <p class="hero__def" data-hero-item><b>okulya</b> <i>do umbundu,</i> <span>comer.</span></p>
         <p class="hero__tag" data-hero-item>O sabor de casa. A alma de Luanda.</p>
@@ -94,6 +100,12 @@
       </div>
 
       <a class="hero__cue" href="#o-dia"><span>o nosso dia</span><i></i></a>
+
+      <!-- Appears on the photo once it has filled the screen: the start of "um dia no okulya" -->
+      <div class="hero__after" aria-hidden="true">
+        <p class="display-l"><span class="line-mask"><span>um dia</span></span><span class="line-mask"><span>no okulya</span></span></p>
+        <p class="lede">Abrimos às 7h e a cozinha acompanha o dia: café e pastelaria de manhã, almoço ao meio-dia, petiscos ao fim da tarde.</p>
+      </div>
     </section>
 
     <!-- ============ THE DAY (porthole) ============ -->
