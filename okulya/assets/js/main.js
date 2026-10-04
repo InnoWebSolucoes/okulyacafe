@@ -218,24 +218,28 @@
     const afterLede = $('.hero__after .lede', hero);
     const diaIntro = $('.dia__intro');
 
-    // The zoom needs the whole hero on one screen, so it only runs where that fits.
-    const ZOOM = '(min-width: 861px) and (min-height: 640px), (max-width: 860px) and (min-height: 740px)';
-    const STILL = '(min-width: 861px) and (max-height: 639px), (max-width: 860px) and (max-height: 739px)';
+    // Desktop: the hero is exactly one screen, so the zoom needs room for it.
+    // Phones: the hero keeps its natural height and pins at its bottom, so any phone works.
+    const ZOOM = '(min-width: 861px) and (min-height: 640px), (max-width: 860px)';
+    const STILL = '(min-width: 861px) and (max-height: 639px)';
     const zoomAtLoad = window.matchMedia(ZOOM).matches;
 
     // The photo layer covers the whole hero. It is shrunk and moved so its
     // inscribed circle sits exactly on the "o". p: 0 = the "o", 1 = full screen.
+    // Its box is read from layout (offset*), which its own transform doesn't affect.
     const geo = { x: 0, y: 0, s: 1, r0: 0, rEnd: 0 };
     const state = { p: 0, open: zoomAtLoad ? 0 : 1 };
     const measure = () => {
       const hr = hero.getBoundingClientRect();
       const or = o.getBoundingClientRect();
-      const W = hr.width; const H = hr.height;
+      const W = reveal.offsetWidth; const H = reveal.offsetHeight;
+      const cx = hr.left + reveal.offsetLeft + W / 2;
+      const cy = hr.top + reveal.offsetTop + H / 2;
       geo.r0 = Math.min(W, H) / 2;
       geo.rEnd = Math.hypot(W, H) / 2 + 2;
       geo.s = or.width / 2 / geo.r0;
-      geo.x = or.left - hr.left + or.width / 2 - W / 2;
-      geo.y = or.top - hr.top + or.height / 2 - H / 2;
+      geo.x = or.left + or.width / 2 - cx;
+      geo.y = or.top + or.height / 2 - cy;
     };
     const draw = () => {
       const { p } = state;
@@ -263,7 +267,12 @@
         defaults: { ease: 'none' },
         scrollTrigger: {
           trigger: hero,
-          start: 'top top',
+          // pin once the bottom of the hero (the word and buttons on phones) is on screen;
+          // on desktop the hero is one screen tall, so that is right at the top
+          start: () => {
+            const top = hero.getBoundingClientRect().top + window.scrollY;
+            return Math.max(top, top + hero.offsetHeight - window.innerHeight);
+          },
           end: () => `+=${Math.round(window.innerHeight * 1.4)}`,
           pin: true,
           scrub: 0.8,

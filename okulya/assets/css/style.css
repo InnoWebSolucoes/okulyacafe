@@ -214,7 +214,7 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 
 /* full-screen mobile menu */
 .mobile-menu {
-  position: fixed; inset: 0; z-index: 90;
+  position: fixed; inset: 0; z-index: 90; overflow: hidden;
   background: var(--ambar);
   display: flex; flex-direction: column; justify-content: center;
   padding: calc(var(--header-h) + 10px) var(--gutter) 32px;
@@ -337,22 +337,28 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
   transform: rotate(-6deg);
 }
 
-/* the photo layer: hidden until JS clips it to the "o" */
+/* the photo layer: hidden until JS clips it to the "o".
+   It covers the whole hero and reaches below it by the height of a phone's
+   collapsing toolbar (100lvh - 100svh), so no gap shows at the bottom when
+   the toolbar hides mid-scroll. 0 on desktop. */
 .hero__reveal {
   position: absolute; inset: 0; z-index: 0; display: none;
+  bottom: calc(100svh - 100lvh);
   transform-origin: 50% 50%; will-change: transform, clip-path; pointer-events: none;
 }
 .hero__reveal-img { width: 100%; height: 100%; object-fit: cover; }
 .hero__shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(42, 24, 16, .2), rgba(42, 24, 16, .62)); opacity: 0; }
+/* the closing text sits in the last screenful of the hero, which is what is on screen while it is pinned */
 .hero__after {
-  position: absolute; inset: 0; z-index: 3; display: none;
+  position: absolute; inset: auto 0 0; z-index: 3; display: none;
+  height: 100vh; height: 100lvh; bottom: calc(100svh - 100lvh);
   place-content: center; justify-items: center; gap: 20px; text-align: center;
   padding: 0 var(--gutter); color: var(--cal); pointer-events: none;
 }
 .hero__after .display-l { font-family: var(--font-display); }
 .hero__after .lede { margin-inline: auto; }
 
-/* zoom mode (set by JS when motion is on and the screen is tall enough) */
+/* zoom mode (set by JS when motion is on). Desktop: the hero is exactly one screen. */
 .hero.is-zoom { height: 100vh; height: 100svh; min-height: 0; padding-bottom: 64px; }
 .hero.is-zoom .hero__reveal { display: block; clip-path: circle(0px at 50% 50%); }
 .hero.is-zoom .hero__o-img { visibility: hidden; }
@@ -380,10 +386,10 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
   .hero__actions { justify-content: center; }
   .hero__stage { width: min(88vw, 460px); }
   .hero__cue { display: none; }
-  /* phones in zoom mode: everything has to fit one screen, so the plate shrinks */
-  .hero.is-zoom { align-content: center; gap: 28px; padding-bottom: 56px; }
-  .hero.is-zoom .hero__copy { gap: 14px; }
-  .hero.is-zoom .hero__stage { width: min(88vw, 460px, calc(100svh - 550px)); }
+  /* phones in zoom mode: the hero keeps its natural height with the plate first,
+     and it pins once the word and buttons (now at the bottom) are on screen */
+  .hero.is-zoom { height: auto; min-height: 100svh; padding-bottom: 48px; }
+  .hero.is-zoom .hero__copy { order: 0; }
 }
 
 /* ==========================================================================
@@ -400,7 +406,12 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 .dia__stage { position: relative; padding: 20px var(--gutter) 100px; max-width: var(--max); margin-inline: auto; }
 .dia__index, .dia__sun, .dia__cutout { display: none; }
 .dia__step { display: grid; grid-template-columns: minmax(180px, 320px) 1fr; align-items: center; gap: clamp(24px, 5vw, 80px); padding-block: 28px; }
-.dia__circle { position: relative; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--ambar); }
+/* clip-path as well as the radius: Safari does not clip moving (transformed)
+   children to a rounded overflow box, which made the photos show as squares */
+.dia__circle {
+  position: relative; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--ambar);
+  -webkit-clip-path: circle(50% at 50% 50%); clip-path: circle(50% at 50% 50%);
+}
 .dia__img { position: absolute; inset: 0; overflow: hidden; }
 .dia__img img { width: 100%; height: 100%; object-fit: cover; }
 .dia__img--open { display: grid; place-items: center; background: var(--mel); }
@@ -658,7 +669,9 @@ html.is-leaving .pt { pointer-events: all; clip-path: circle(150% at var(--x, 50
 /* ==========================================================================
    Footer (revealed from under the page)
    ========================================================================== */
-main { position: relative; z-index: 1; background: var(--cal); }
+/* overflow-x: clip keeps the turning plates, stickers and tilted cards from
+   widening the page; on phones that made the whole layout zoom out */
+main { position: relative; z-index: 1; background: var(--cal); overflow-x: clip; }
 .site-footer {
   position: relative; z-index: 0; background: var(--cafe); color: var(--cal);
   padding: clamp(64px, 8vw, 110px) 0 0; overflow: hidden;
@@ -702,6 +715,11 @@ main { position: relative; z-index: 1; background: var(--cal); }
 .wa svg.ring text { font-size: 11.5px; }
 .wa .wa__icon { width: 30px; height: 30px; fill: var(--cal); }
 .menu-open .wa { opacity: 0; pointer-events: none; }
+@media (max-width: 700px) {
+  /* smaller on phones, where it would otherwise cover buttons and text */
+  .wa { --size: 60px; }
+  .wa .wa__icon { width: 24px; height: 24px; }
+}
 
 /* ==========================================================================
    Inner pages: shared hero
