@@ -124,7 +124,8 @@
       const url = new URL(a.href, location.href);
       if (url.origin !== location.origin) return;
       if (url.pathname === location.pathname && url.hash) return; // in-page anchor
-      if (!/(\.html|\/)$/.test(url.pathname)) return;
+      // pages only: .html files or extensionless paths like /okulya (not images, PDFs…)
+      if (!/\.html$/.test(url.pathname) && /\.[a-z0-9]+$/i.test(url.pathname)) return;
       e.preventDefault();
       pt.style.setProperty('--x', `${e.clientX || innerWidth / 2}px`);
       pt.style.setProperty('--y', `${e.clientY || innerHeight / 2}px`);

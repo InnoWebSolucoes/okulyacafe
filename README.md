@@ -1,32 +1,44 @@
 # Okulya Café
 
-Website for Okulya Café, Rua do Mat, Talatona, Luanda. Static HTML, CSS and JS with no build step. It deploys as-is to Vercel or any static host.
+Website for Okulya Café, Rua do Mat, Talatona, Luanda. Static HTML, CSS and JS with no build step.
+
+Live at **https://innoweb.agency/okulya**.
 
 ## Run locally
 
+From the repo root (not from inside `okulya/`):
+
 ```sh
 python -m http.server 8137
-# open http://127.0.0.1:8137
+# open http://127.0.0.1:8137/okulya/
 ```
+
+## How it is served
+
+The site lives at the path `/okulya`, so every file sits in the `okulya/` folder. Every internal link and asset uses an absolute URL starting with `/okulya/`, for example `/okulya/menu.html` or `/okulya/assets/css/style.css`. Keep it that way when adding pages or images. Relative paths break when someone visits `/okulya` without a trailing slash.
+
+- **Vercel project:** `okulyacafe` in the team "innoweb's projects". It is connected to this repo, so pushing to `main` deploys. `vercel.json` sends `/` to `/okulya`.
+- **innoweb.agency/okulya:** the agency site (`innoweb-agency` repo, `next.config.js`) proxies `/okulya` and `/okulya/*` to this project, the same way it serves `/cfmoto` and `/dcbarber`.
 
 ## Pages
 
-| File | Content |
-| --- | --- |
-| `index.html` | Hero, "um dia no okulya" scroll story, menu teaser, experiences, Instagram, contact |
-| `menu.html` | Full menu (entradas, pratos principais, sobremesas, bebidas) with prices in Kz |
-| `sobre.html` | The story, the name (Umbundu for "to eat"), lunch values |
-| `experiencias.html` | Prato do dia, promotions, corporate events, birthdays, weekly event |
+| File (in `okulya/`) | URL | Content |
+| --- | --- | --- |
+| `index.html` | `/okulya` | Hero, "um dia no okulya" scroll story, menu teaser, experiences, Instagram, contact |
+| `menu.html` | `/okulya/menu.html` | Full menu (entradas, pratos principais, sobremesas, bebidas) with prices in Kz |
+| `sobre.html` | `/okulya/sobre.html` | The story, the name (Umbundu for "to eat"), lunch values |
+| `experiencias.html` | `/okulya/experiencias.html` | Prato do dia, promotions, corporate events, birthdays, weekly event |
 
 The header, mobile menu, contact section ("encontra-nos") and footer are repeated in all four files. When you change one of them, change it in every page.
 
 ## Structure
 
 ```
-assets/css/style.css   design tokens at the top (:root), then sections in page order
-assets/js/main.js      all interactions; each block checks the element exists first
-assets/vendor/         GSAP 3.13 + ScrollTrigger, Lenis (self-hosted, no CDN)
-assets/img/            optimised WebP; instagram/ holds thumbnails from @0kulya.cafe
+okulya/assets/css/style.css   design tokens at the top (:root), then sections in page order
+okulya/assets/js/main.js      all interactions; each block checks the element exists first
+okulya/assets/vendor/         GSAP 3.13 + ScrollTrigger, Lenis (self-hosted, no CDN)
+okulya/assets/img/            optimised WebP; instagram/ holds thumbnails from @0kulya.cafe
+vercel.json                   sends / to /okulya
 ```
 
 ## Design notes
@@ -45,5 +57,4 @@ assets/img/            optimised WebP; instagram/ holds thumbnails from @0kulya.
   - that coffee is served from 10h, as the old site said, even though the café opens at 7h
   - the menu prices
   - what happens at the weekly event
-- [ ] Set `og:image` to an absolute URL once the domain is known.
 - [ ] The "aberto agora" status uses Luanda time but cannot know about public holidays. The full hours are always shown next to it.

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/", "destination": "/okulya", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/okulya", "destination": "/okulya/index.html" }
+  ]
+}
